@@ -27,7 +27,7 @@ double getValidInput(std::string_view message)
 
 }
 
-double calculated1(double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration) {
+double calculateD1(double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration) {
 
     double logTerm = std::log(stockPrice/strikePrice);
     double varianceTerm = 0.5 * (volatility * volatility);
@@ -42,10 +42,10 @@ double calculated1(double stockPrice, double strikePrice, double riskFreeRate, d
     return d1;
 }
 
-double calculated2(double d1, double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration)
+double calculateD2(double d1, double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration)
 {
 
-    d1 = calculated1(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
+    d1 = calculateD1(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
 
 
     double d2{ d1 - (volatility * std::sqrt(timeToExpiration))};
@@ -53,12 +53,15 @@ double calculated2(double d1, double stockPrice, double strikePrice, double risk
     return d2;
 }
 
-double calculateNaturalDistribution()
+double calculateNormalCDF(double x)
 {
-
+    double errorFunctionInput = x / std::sqrt(2.0);
+    double errorFunctionResult = std::erf(errorFunctionInput);
+    double cdf = 0.5 * (1.0 + errorFunctionResult);
+    return cdf;
 }
 
-double
+
 
 int main() {
 
