@@ -40,9 +40,25 @@ double calculated1(double stockPrice, double strikePrice, double riskFreeRate, d
     double d1{numerator / denominator};
 
     return d1;
+}
 
+double calculated2(double d1, double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration)
+{
+
+    d1 = calculated1(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
+
+
+    double d2{ d1 - (volatility * std::sqrt(timeToExpiration))};
+
+    return d2;
+}
+
+double calculateNaturalDistribution()
+{
 
 }
+
+double
 
 int main() {
 
