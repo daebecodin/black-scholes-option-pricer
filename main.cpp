@@ -47,7 +47,6 @@ double calculateD2(double d1, double stockPrice, double strikePrice, double risk
 
     d1 = calculateD1(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
 
-
     double d2{ d1 - (volatility * std::sqrt(timeToExpiration))};
 
     return d2;
@@ -61,6 +60,36 @@ double calculateNormalCDF(double x)
     return cdf;
 }
 
+double calculateDiscountedStrikePrice(double strikePrice, double riskFreeRate, double timeToExpiration)
+{
+
+    double discountFactor = std::exp(-riskFreeRate * timeToExpiration);
+    double discountedStrikePrice = strikePrice * discountFactor;
+
+    return discountedStrikePrice;
+}
+
+// double calculateCall(double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration)
+// {
+//     double s{stockPrice};
+//     double k{strikePrice};
+//     double r{riskFreeRate};
+//     double v{volatility};
+//     double t{timeToExpiration};
+//
+//     double d1{calculateD1(s, k, r, v ,t)};
+//     double nD1{calculateNormalCDF(d1)};
+//
+//     double d2{calculateD2(d1,s, k, r, v, t)};
+//     double nD2{calculateNormalCDF(d2)};
+//
+//     double discountedStrikePrice{calculateDiscountedStrikePrice(k, r,t)};
+//
+//     double callValue = s * nD1 - discountedStrikePrice * nD2;
+//
+//     return callValue;
+//
+// }
 
 
 int main() {
