@@ -15,7 +15,7 @@ double getValidInput(std::string_view message)
         std::cout << message;;
         std::cin >> value ;
 
-        if (std::cin.fail() || value < 0) {
+        if (std::cin.fail() || value <= 0.0) {
             std::cout << "Invalid input. Try again" << '\n';
             std::cin.clear();
             ignoreLine();
@@ -42,14 +42,10 @@ double calculateD1(double stockPrice, double strikePrice, double riskFreeRate, d
     return d1;
 }
 
-double calculateD2(double d1, double stockPrice, double strikePrice, double riskFreeRate, double volatility, double timeToExpiration)
+double calculateD2(double d1, double volatility, double timeToExpiration)
 {
+    return  d1 - (volatility * std::sqrt(timeToExpiration));
 
-    d1 = calculateD1(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
-
-    double d2{ d1 - (volatility * std::sqrt(timeToExpiration))};
-
-    return d2;
 }
 
 double calculateNormalCDF(double x)
@@ -80,7 +76,7 @@ double calculateCall(double stockPrice, double strikePrice, double riskFreeRate,
     double d1{calculateD1(s, k, r, v ,t)};
     double nD1{calculateNormalCDF(d1)};
 
-    double d2{calculateD2(d1,s, k, r, v, t)};
+    double d2{calculateD2(d1,v ,t)};
     double nD2{calculateNormalCDF(d2)};
 
     double discountedStrikePrice{calculateDiscountedStrikePrice(k, r,t)};
@@ -100,14 +96,14 @@ double calculatePut(double stockPrice, double strikePrice, double riskFreeRate, 
     double t{timeToExpiration};
 
     double d1{calculateD1(s, k, r, v ,t)};
-    double nD1{calculateNormalCDF(d1)};
+    double nNegD1{calculateNormalCDF(-d1)};
 
-    double d2{calculateD2(d1,s, k, r, v, t)};
-    double nD2{calculateNormalCDF(d2)};
+    double d2{calculateD2(d1, v, t)};
+    double nNegD2{calculateNormalCDF(-d2)};
 
     double discountedStrikePrice{calculateDiscountedStrikePrice(k, r,t)};
 
-    double putValue = k * discountedStrikePrice * (-nD2) - s * (-nD1);
+    double putValue = discountedStrikePrice * nNegD2 - s * nNegD1;
 
     return putValue;
 }
@@ -119,12 +115,14 @@ int main() {
     double strikePrice = getValidInput("Enter Strike Price (K): ");
     double volatility = getValidInput("Enter Volatility (σ): ");
     double timeToExpiration = getValidInput("Enter Time to Expiration (T): ");
-    double riskFreeRate = getValidInput("Enter Rick-Free Rate (S): ");
+    double riskFreeRate = getValidInput("Enter Rick-Free Rate (r): ");
 
-    std::cout << stockPrice << '\n';
-    std::cout << strikePrice << '\n';
-    std::cout << volatility << '\n';
-    std::cout << timeToExpiration << '\n';
-    std::cout << riskFreeRate << '\n';
+    double call = calculateCall(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
+    double put = calculatePut(stockPrice, strikePrice, riskFreeRate, volatility, timeToExpiration);
+
+    std::cout << "Call: " << call << '\x0a';
+    std::cout << "Put: " << put << '\x0a';
+
     return 0;
+
 }
