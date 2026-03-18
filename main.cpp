@@ -123,6 +123,9 @@ int main() {
     std::cout << "Call: " << call << '\x0a';
     std::cout << "Put: " << put << '\x0a';
 
+    /*
+     * Put-Call Parity
+     */
     std::cout << "Verification\x0a" ;
     std::cout << "Call - Put -> " << call - put << '\x0a';
     std::cout << "Stock Price - Discounted Strike Price -> " << stockPrice - calculateDiscountedStrikePrice(strikePrice, riskFreeRate, timeToExpiration);
