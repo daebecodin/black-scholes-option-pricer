@@ -40,7 +40,12 @@ Output:
 ```
 Call: 10.4506
 Put: 5.57352
+Verification
+Call - Put -> 4.87707
+Stock Price - Discounted Strike Price -> 4.87707
 ```
+
+The verification step confirms [put-call parity](https://en.wikipedia.org/wiki/Put%E2%80%93call_parity): `Call - Put` should equal `S - K·e^(-rT)`.
 
 All inputs must be positive numbers. Invalid or non-numeric input is rejected with a re-prompt.
 
